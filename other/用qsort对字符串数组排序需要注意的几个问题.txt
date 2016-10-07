@@ -1,0 +1,23 @@
+ 用qsort对字符串数组排序需要注意的几个问题 2012-10-08 17:47:20
+分类： C/C++
+  qsort是万能数组排序函数，必须要学会使用，简单的数组自然不用说，这里主要讨论一下字符串数组的使用。
+  首先看一下qsort的原型：
+    	void qsort(void *base, size_t nmemb, size_t size, 
+			int(*compar)(const void *, const void *));
+  正确使用这个函数要注意几点：
+	1.base要传数组的首地址
+	2.size传的是每个元素的大小
+	3.正确编写compar函数
+
+下面是实际应用：
+    一个字符串数组：*str[MAX],假设里面现在保存了n个字符串了。
+    首先要正确理解什么是字符串数组，简单的说，可以理解成它就是一个数组，只不过其中的元素是一串字符串，而访问这些字符串，得用指针，也就是它们的地址，比如*name[]={"james","henry"}，那么访问其中的字符串就是name[0],name[1]...这里就有个容易混淆的地方了，对于字符串数组，那么每个元素的大小到底是多少呢？对name[0]来说，到底是字符串“james”的长度5，还是char*的大小4呢？答案应该是4，因为字符串数组里面保存的是各个字符串的指针，所以回到上面所说的第二点注意，用qsort的时候应该要传sizeof(char *);
+   第二，编写compar函数比较字符串有地方要注意：
+       不能把strcmp本身传给qsort，即不能写strcmp(p,q),因为形参是const void*类型，同理，写成strcmp((char *)p, (char *)q);也是无效的；正确的写法应该是:strcmp(*(char **)p, *(char **)q);先强制转换成char**,在用*减少一层间接寻址操作：
+      int compar_words(const void *p, const void *q)
+      {
+	return strcmp(*(char **)p, *(char **)q);
+      }
+大家可以好好体会一下。对于上面的应用，最后使用qsort应该是这样：
+	qsort(str, n, sizeof(char *), compar);
+由此可见，小小的一个qsort使用，对基本概念的理解得比较深刻。由此可见基础扎实的重要性^_^
