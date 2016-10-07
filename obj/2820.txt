@@ -1,0 +1,81 @@
+Description 
+
+
+
+一串连续字符被称作围栏当且仅当它由间隔的‘|’和‘-’组成。比如“|-|-|-|”或“-|-|”（引号仅供说明）。注意“|-||-|”或者“--”不是围栏，因为每个都包含了两个或两个以上的相同连续字符。给你一个字符串，请找出它的最长的一个可以称作围栏的子串长度。
+
+
+Input 
+
+
+
+ 
+ 
+一个长度为n(0≤n≤50)的字符串s，s只包含‘| ’、‘-’字符。
+
+
+Output 
+
+
+
+在一行中输出最长的围栏长度值。
+
+
+Sample Input 
+
+
+
+ 
+ 
+|||-||--|--|---|-||-|-|-|--||---||-||-||-|--||
+
+
+Sample Output 
+
+
+
+8
+
+
+解1：
+计算每一段的长度，找出最长的一段
+
+#include <stdio.h>
+#include <string.h>
+#define N 50
+int fenceLen(char* s)
+{ int i,n=strlen(s),m=0,len=1;
+  if (n<2) return n;//处理长度<2的情况
+  for (i=1;i<n;i++)
+    if (s[i]!=s[i-1]) len++;
+    else { if (len>m) m=len; len=1; }//当一个字符与前一个字符相同时，表示新的一段开始
+  if (len>m) m=len; //处理最后一段
+  return m;
+}
+ 
+int main()
+{ char s[N+1];  gets(s);
+  printf("%d\n",fenceLen(s));
+  return 0;
+}
+
+解2：
+递归方法：
+
+#include <stdio.h>
+#include <string.h>
+#define N 50
+int max(int a,int b) {  return a>b ? a : b;  }
+int fenceLen(char* s)
+{ char*p=s;
+  if (!*p) return 0; //空字符串的长度=0，递归终止条件
+  while (*(p+1)&&*p!=*(p+1)) p++; //计算开头第一段的长度
+  return max(p+1-s,fenceLen(p+1)); //比较第一段与余下字符串表示围栏的长度
+}
+ 
+int main()
+{ char s[N+1];
+  gets(s);
+  printf("%d\n",fenceLen(s));
+  return 0;
+}

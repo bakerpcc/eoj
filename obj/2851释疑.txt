@@ -1,0 +1,23 @@
+第一题伪算法
+1. 读取整数n;
+2. m = reverse(n); // reverse函数是自定义函数，用来求n的反数
+3. int count = 1; s = n + m; 
+4. while (s不是回文) {
+s = s + reverse(s);
+ count++;
+}
+printf("%d %d\n", count, s);
+
+其中，4中while循环的“s不是回文”的判断可以有多种方法，可以将s转换为串后用循环判断，也可以通过s与s的反数是否相等来判断。本题恰好写了一个reverse函数求某个整数的反数，刚好可以用在这里：while (s != reverse(s)) {...}
+剩下的主要任务就是reverse函数的实现了：
+int reverse(int n) { // 计算并返回n的反数
+ // 可以把n转换为字符串，然后反转字符串后再转换为整数（可以用stdlib.h里的itoa和atoi函数）。这里用另一种直接计算的方法
+ int result = 0, r; // result存放结果，r是求模
+ while (n > 0) {
+ n = n / 10; // 整数除法：123 / 10 = 12
+ result = result * 10 + n % 10; // 123 % 10 = 3
+ }
+
+ return result; // 比如整数123，while循环3次，result计算结果分别为3，32，321，返回321
+}
+

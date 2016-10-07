@@ -1,0 +1,116 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<ctype.h>
+#include<math.h>
+
+#define MAXEXP 50
+#define MAXLEN 100
+
+int parse(char *s,int *a){
+	int i;
+	char *p = s;
+
+	while (*p != 0) {
+		// 读取多项式的一个单位，即读取AnX^n
+		p = readOne(p, a);
+	}
+
+	// 寻找刚读取多项式项的最高阶
+	for (i = MAXEXP - 1; i >= 0; i--)
+		if (a[i] != 0)
+			return i;
+
+	// 没找到，应该不会出现。
+	return 0;
+}
+
+char * readOne(char *s, int *a) {
+	int exponent = 0, base = 0;
+
+	// 如果开始是x，基数就是1
+	if (*s == 'x' || *s == 'X')
+		base = 1;
+	else // 读取基数
+		s = readInt(s, &base); 
+	//这里和以下的流程是这样的：
+
+	//如果读到的是如“1”这样的常数项，则只进行else s=readInt(s,&base)这里，
+	//下文的if (*s == 'x' || *s == 'X')“2”不满足了，所以直接exponent = 0
+	//a[exponent] = base为a[0]=2,意为0次方的常数等于2。
+
+	//如果读到“x”，则进行上面的if (*s == 'x' || *s == 'X') base = 1;
+	//此时s指针还指着x,则能继续进行下方的 if (*s == 'x' || *s == 'X') 
+	//故exponent=1，s++后*s不为“^”，不用再往后读了，则a[exponent] = base即为a[1]=1,意味x项
+
+	//如果读到“x^2”这样的系数为1，但指数不为1的项，则if (*s == 'x' || *s == 'X') base = 1;
+	//if (*s == 'x' || *s == 'X') exponent = 1;（指数至少为1，暂时设定为1，底下会增）
+	//s++，*s=^,则s++，s = readInt(s, &exponent)，读后面的阶数“2”。
+	//a[2]=1
+
+	//如果读到“3x^2”这样系数阶数均不为1的，则上方else s = readInt(s, &base)读取系数3。
+	//然后向下，readInt是返回读取整数后的位置，所以已经读到了3后面的x
+	//exp至少为1后，继续向下，读取指数2，然后a[exponent] = base为a[2]=3
+
+	//这里要注意的是readInt里的base和exponent对应的是函数定义里的*n
+	//*n = atoi(tmp)，*n里放的是一个数，这里是指数或系数。所以函数调用时要用&。
+
+	//至于为何要用char * readInt(char *p, int *n)而不是int n，参照红皮P227-228的swap
+	
+
+	if (*s == 'x' || *s == 'X') {
+		// 当前位置是x，则阶数至少为1，先置为1。
+		exponent = 1;
+
+		s++;
+		if (*s == '^') { // '^'表示后面跟着阶数
+			s++;
+			s = readInt(s, &exponent); //读后面的阶数
+		}
+	}
+
+	a[exponent] = base; // 保存读取结果
+
+	// printf("exponent=%d, base=%d\n", exponent, base);
+
+	// 必须返回当前读到的位置
+	return s;
+}
+char * readInt(char *p, int *n) {
+	char tmp[MAXLEN] = {0};
+	int i = 0;
+	if (*p == '-' || *p == '+') {
+		tmp[i] = *p;
+		p++;
+		i++;
+	}
+
+	while (*p >= '0' && *p <= '9') {
+		tmp[i] = *p;
+		p++;
+		i++;
+	}
+
+	// atoi函数将一个用字符串表示的数转换成整数。atof函数是转换成浮点数。
+	*n = atoi(tmp);
+	//printf("tmp = %s, v=%d\n", tmp, *n);
+	return p;
+}
+
+
+int main()
+{char s[20],*p,zuobiao[41][41];
+int digit;
+while(gets(s))
+	{int i;
+	float j;
+	// a1,a2是读入的两个多项式，a3是结果; 
+	// 用数组表示多项式：x^2-3x+1在a里表示为a[2]=1, a[1]=-3, a[0]=1
+	int a[MAXEXP] = {0};
+	int aexp = 0;
+	aexp = parse(s, a); 
+	for(i=-20;i<=20;i++)
+		{j=1.0*pow(i,1.0*a[aexp]),aexp--;}
+	for(i=-20;i<=20;i++)
+	
+	}
+}

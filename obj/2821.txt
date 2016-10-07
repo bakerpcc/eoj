@@ -1,0 +1,95 @@
+Description 
+
+
+
+计算两个一元多项式的乘积。
+
+
+Input 
+
+
+
+ 
+ 
+每行两个多项式，以一个空格分隔，多项式格式为 anx^n+…+a1x+a0。
+ 
+每行长度不超过100，0<n<50。
+
+
+Output 
+
+
+
+每组数据一行，根据次数由高到低顺序输出两个多项式乘积的非零项系数，两个系数之间由一个空格分隔。
+
+
+Sample Input 
+
+
+
+x+1 x-1
+ 
+x^2-3x+1 x^3
+ 
+x+2 2
+
+
+Sample Output 
+
+
+
+1 -1
+ 
+1 -3 1
+ 
+2 4
+=====
+isdigit
+ 
+
+
+isdigit 
+
+原型：extern int isdigit(char c);
+ 
+用法：#include <ctype.h>
+ 
+功能：判断字符c是否为数字
+ 
+说明：当c为数字0-9时，返回非零值，否则返回零。
+ 
+附加说明 此为宏定义，非真正函数。 
+
+举例：
+ 
+// isdigit.c
+ 
+#include <stdlib.h>
+ 
+#include <ctype.h>
+ 
+main()
+ 
+{
+ 
+int c;
+ 
+clrscr(); // clear screen
+ 
+c='a';
+ 
+printf("%c:%s\n",c,isdigit(c)?"yes":"no");
+ 
+c='9';
+ 
+printf("%c:%s\n",c,isdigit(c)?"yes":"no");
+ 
+c='*';
+ 
+printf("%c:%s\n",c,isdigit(c)?"yes":"no");
+ 
+getchar();
+ 
+return 0;
+ 
+}
