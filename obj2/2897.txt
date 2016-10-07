@@ -1,0 +1,22 @@
+1. cmp函数里面用strcmp比较，strcmp函数比较两个串相等时，返回0；因此应该用strcmp(s,t)==0||str....或者!strcmp(s,t)||
+2. 输入可能存在大小写混合的单词，你没有处理。c头文件ctype.h中有几个函数用来处理字符大小写的情况：isupper(c), islower(c)分别判断参数c是否是大写或小写，toupper(c),tolower(c)分别将c转换为大写或小写。这四个库函数都会检查c不是字母的情况，不会处理非字母的情况。
+
+3. c头文件string.h中有个特殊的函数：char *strtok(char s[], const char *delim);
+
+分解字符串为一组字符串。s为要分解的字符串，delim为分隔符字符串。
+
+该函数可以将输入参数s直接分割为一个个的单词，分割的标准是delim指定的一个或多个字符，函数会检索串中存在delim中任何字符的地方，并将该字符替换为'\0'，然后返回单词起始的位置；详细说明见：http://baike.baidu.com/view/1028553.htm
+
+这一题里面可以这样用：
+
+char *p = strtok(s, " -"); // 空格和-都是分割单词的符号
+
+while(p) { // 如果strtok找不到分割符了，则返回NULL
+
+    if (*p && cmp(p) == 0) // 如果p不是空串，且p不是the、a等常用单词
+
+	 printf("%c", toupper(*p)); // 打印p所指向单词的第一个字符的大写
+
+    p = strtok(NULL, " -"); // 继续找下一个单词，注意第一次调用strtok是传字符串，后面继续查找时，直接传递NULL即可。
+
+}
