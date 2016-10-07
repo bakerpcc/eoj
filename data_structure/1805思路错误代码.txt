@@ -1,0 +1,46 @@
+#include<stdio.h>
+#include<string.h>
+#define MAXN 50124
+
+char r[MAXN];
+
+int search(char a,char *b)
+{
+	//int i=strlen(b)-1;
+	int i,j;
+	for(i=0;i<strlen(b);i++)
+	{if(a==b[i]) {return i;}
+	}
+	return -1;
+}
+
+int main()
+{
+	char a[MAXN],b[MAXN];
+	int i,j,k,r,Lmax=0,L;
+	gets(a);
+	gets(b);
+	if(strlen(a)<strlen(b))
+	{for(i=0;i<strlen(a);i++){
+		if((r=search(a[i],b))>=0){L=1;
+			for(j=i+1,k=r+1;j<strlen(a)&&k<strlen(b);j++,k++)
+			if(a[j]==b[k]) {L=j-i+1;printf("%c",a[j]);}
+			//else L=1;
+			
+		}
+		if(Lmax<L) Lmax=L;
+		}
+	}
+	else
+		{for(i=0;i<strlen(b);i++){
+		if((r=search(b[i],a))>=0){L=1;
+			for(j=i+1,k=r+1;j<strlen(b)&&k<strlen(a);j++,k++)
+			if(b[j]==a[k]) {L=j-i+1;printf("%c",b[j]);}
+			//else L=1;
+		}
+		if(Lmax<L) Lmax=L;
+		}
+	}
+	printf("%d\n",Lmax);
+	return 0;
+}
